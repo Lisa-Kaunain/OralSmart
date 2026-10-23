@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}OralSmart AI — Better oral care starts with a closer look{% endblock %}
+{% block content %}
+<section class="hero-section">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow"><span class="eyebrow-dot"></span> A more thoughtful way to check in on your smile</div>
+      <h1>Your smile deserves <span>smart care.</span></h1>
+      <p class="hero-lead">AI-Powered Dental Screening &amp; Personalized Oral Care. Share a dental photo, explore helpful guidance, and connect with a dentist for professional review.</p>
+      <div class="d-flex flex-wrap gap-3 mt-4">
+        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Start a screening <i class="bi bi-arrow-right ms-2"></i></a>
+        <a href="#how-it-works" class="btn btn-light btn-lg">See how it works</a>
+      </div>
+      <div class="hero-trust"><i class="bi bi-shield-check"></i><span>Your images are private and accessible only to you and signed-in dentists.</span></div>
+      <div class="demo-transparency"><i class="bi bi-info-circle"></i>AI condition predictions are produced only when a trained model and matching class labels are configured; otherwise, no condition prediction is shown.</div>
+    </div>
+    <div class="hero-visual">
+      <div class="visual-orbit orbit-one"></div><div class="visual-orbit orbit-two"></div>
+      <div class="smile-card">
+        <div class="smile-card-top"><span class="status-pill"><span></span> YOUR ORAL HEALTH</span><i class="bi bi-three-dots"></i></div>
+        <div class="tooth-art"><div class="tooth-glow"></div><i class="bi bi-emoji-smile"></i></div>
+        <div class="smile-caption"><div><strong>A clearer picture</strong><span>Small steps, informed care</span></div><div class="circle-arrow"><i class="bi bi-arrow-up-right"></i></div></div>
+      </div>
+      <div class="floating-note note-top"><span class="note-icon"><i class="bi bi-camera"></i></span><span><strong>Easy image upload</strong><small>JPG or PNG</small></span></div>
+      <div class="floating-note note-bottom"><span class="note-icon mint"><i class="bi bi-person-check"></i></span><span><strong>Human review</strong><small>By a qualified dentist</small></span></div>
+    </div>
+  </div>
+</section>
+<section class="trust-strip"><div class="container trust-items"><span><i class="bi bi-lock"></i> Private by design</span><span><i class="bi bi-heart-pulse"></i> Care-focused guidance</span><span><i class="bi bi-person-badge"></i> Dentist review workflow</span></div></section>
+<section class="section-pad" id="about">
+  <div class="container">
+    <div class="section-heading text-center"><span class="section-kicker">A better first step</span><h2>Oral health, made <span>easier to navigate.</span></h2><p>OralSmart AI brings image sharing, general guidance, and dentist follow-up together in one simple experience.</p></div>
+    <div class="row g-4 feature-row">
+      <div class="col-md-4"><article class="feature-card"><div class="feature-icon icon-lilac"><i class="bi bi-camera"></i></div><h3>Share a photo</h3><p>Upload a clear image of your teeth and keep a secure record of each screening.</p></article></div>
+      <div class="col-md-4"><article class="feature-card"><div class="feature-icon icon-mint"><i class="bi bi-lightbulb"></i></div><h3>Get useful guidance</h3><p>Explore practical, general oral-health tips while you decide on your next step.</p></article></div>
+      <div class="col-md-4"><article class="feature-card"><div class="feature-icon icon-peach"><i class="bi bi-person-hearts"></i></div><h3>Request a dentist review</h3><p>Share your screening with a dentist for a separate professional finding and care plan.</p></article></div>
+    </div>
+  </div>
+</section>
+<section class="how-section section-pad" id="how-it-works">
+  <div class="container">
+    <div class="section-heading text-center"><span class="section-kicker">Simple by design</span><h2>From photo to <span>next steps.</span></h2><p>Your care journey stays clear at every step.</p></div>
+    <div class="steps-grid">
+      <div class="step-card"><span class="step-number">01</span><div class="step-icon"><i class="bi bi-person-plus"></i></div><h3>Create an account</h3><p>Sign in securely as a patient or dentist.</p></div>
+      <div class="step-card"><span class="step-number">02</span><div class="step-icon"><i class="bi bi-image"></i></div><h3>Upload an image</h3><p>Add a JPG or PNG photo for a preliminary screening.</p></div>
+      <div class="step-card"><span class="step-number">03</span><div class="step-icon"><i class="bi bi-clipboard2-heart"></i></div><h3>Review your result</h3><p>Get clear guidance and view your screening history.</p></div>
+      <div class="step-card"><span class="step-number">04</span><div class="step-icon"><i class="bi bi-chat-square-heart"></i></div><h3>Connect with a dentist</h3><p>Request professional review and follow-up guidance.</p></div>
+    </div>
+  </div>
+</section>
+<section class="cta-section"><div class="container cta-inner"><div><span class="section-kicker">Your next step starts here</span><h2>Make room for a healthier smile.</h2><p>Create your account and start your OralSmart journey today.</p></div><a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Create an account <i class="bi bi-arrow-right ms-2"></i></a></div></section>
+{% endblock %}

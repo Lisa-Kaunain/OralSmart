@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Review screening · OralSmart AI{% endblock %}
+{% block content %}
+<div class="dashboard-page"><div class="container">
+  <div class="breadcrumb-line"><a href="{{ url_for('dentist_dashboard') }}">Review queue</a><i class="bi bi-chevron-right"></i><span>Screening #{{ screening.id }}</span></div>
+  <div class="page-heading"><div><span class="section-kicker">PATIENT REVIEW</span><h1>Screening #{{ screening.id }}</h1><p>Submitted {{ screening.created_at.strftime('%B %d, %Y at %I:%M %p') }}</p></div><a href="{{ url_for('dentist_dashboard') }}" class="btn btn-light"><i class="bi bi-arrow-left me-2"></i>Back to queue</a></div>
+  <div class="review-layout">
+    <div>
+      <section class="panel-card dentist-image-card"><img src="{{ url_for('screening_image', screening_id=screening.id) }}" alt="Dental image submitted by {{ screening.patient.name }}"><div class="image-caption"><strong>{{ screening.patient.name }}</strong><span>{{ screening.patient.email }}{% if screening.patient.phone %} · {{ screening.patient.phone }}{% endif %}</span></div></section>
+      <section class="panel-card ai-summary mt-4"><span class="demo-label"><i class="bi bi-info-circle"></i> {% if screening.model_mode == 'onnx' %}AI PRELIMINARY SCREENING{% elif screening.model_mode == 'demo' %}LEGACY DEMO RESULT — NOT AN AI PREDICTION{% else %}AI MODEL UNAVAILABLE — NO PREDICTION{% endif %}</span><h2>{{ screening.ai_result }}</h2><p>{{ screening.explanation }}</p><div class="ai-confidence">Confidence: {% if screening.confidence is not none %}{{ '%.1f'|format(screening.confidence * 100) }}%{% else %}Not available{% endif %}</div></section>
+      {% if review %}<section class="panel-card previous-review mt-4"><span class="section-kicker">SAVED REVIEW</span><h2>Professional finding</h2><p>{{ review.professional_finding }}</p><h3>Treatment recommendation</h3><p>{{ review.treatment_plan }}</p>{% if review.follow_up_date %}<p><strong>Follow-up date:</strong> {{ review.follow_up_date.strftime('%B %d, %Y') }}</p>{% endif %}</section>{% endif %}
+    </div>
+    <section class="panel-card review-form-card"><div class="panel-heading"><div><h2>Dentist review</h2><p>Your professional assessment is separate from the AI screening output.</p></div></div>
+      <form method="post" class="form-stack">
+        <label for="professional_finding">Professional finding</label><textarea class="form-control" id="professional_finding" name="professional_finding" rows="4" required>{{ review.professional_finding if review else '' }}</textarea>
+        <label for="treatment_plan">Treatment recommendation</label><textarea class="form-control" id="treatment_plan" name="treatment_plan" rows="4" required>{{ review.treatment_plan if review else '' }}</textarea>
+        <label for="notes">Dentist notes <span class="optional-label">Optional</span></label><textarea class="form-control" id="notes" name="notes" rows="3">{{ review.notes if review else '' }}</textarea>
+        <label for="follow_up_date">Follow-up date <span class="optional-label">Optional</span></label><input class="form-control" id="follow_up_date" name="follow_up_date" type="date" value="{{ review.follow_up_date.isoformat() if review and review.follow_up_date else '' }}">
+        <label for="review_status">Review status</label><select class="form-select" id="review_status" name="review_status" required>
+          {% for status in ['Reviewed', 'Follow-up Required', 'Completed'] %}<option value="{{ status }}" {% if review and review.review_status == status %}selected{% elif not review and status == 'Reviewed' %}selected{% endif %}>{{ status }}</option>{% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary btn-lg mt-2"><i class="bi bi-check2-circle me-2"></i>Save dentist review</button>
+      </form>
+    </section>
+  </div>
+</div></div>
+{% endblock %}

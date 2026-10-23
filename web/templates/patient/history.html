@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Screening history · OralSmart AI{% endblock %}
+{% block content %}
+<div class="dashboard-page"><div class="container">
+  <div class="page-heading"><div><span class="section-kicker">YOUR RECORDS</span><h1>Screening history</h1><p>Review your previous image submissions and dentist feedback.</p></div><a href="{{ url_for('upload_image') }}" class="btn btn-primary"><i class="bi bi-plus-lg me-2"></i>New screening</a></div>
+  <section class="panel-card">{% if screenings %}<div class="table-responsive"><table class="table app-table align-middle"><thead><tr><th>Image</th><th>Date</th><th>Result</th><th>Confidence</th><th>Review status</th><th>Dentist recommendation</th><th></th></tr></thead><tbody>
+  {% for screening in screenings %}<tr><td><div class="table-image"><img src="{{ url_for('screening_image', screening_id=screening.id) }}" alt="Dental image"></div></td><td>{{ screening.created_at.strftime('%b %d, %Y') }}</td><td>{{ screening.ai_result }}</td><td>{% if screening.confidence is not none %}{{ '%.1f'|format(screening.confidence * 100) }}%{% else %}<span class="muted-copy">N/A</span>{% endif %}</td><td><span class="status-badge {{ 'status-done' if screening.dentist_review else 'status-pending' }}">{{ screening.review_status if screening.review_requested else 'Not requested' }}</span></td><td>{{ screening.dentist_review.treatment_plan if screening.dentist_review else '—' }}</td><td><a class="text-link" href="{{ url_for('screening_result', screening_id=screening.id) }}">Report <i class="bi bi-arrow-right"></i></a></td></tr>{% endfor %}
+  </tbody></table></div>{% else %}<div class="empty-state"><span class="empty-icon"><i class="bi bi-journal-medical"></i></span><h3>Your history is empty</h3><p>Your screenings and dentist reviews will be saved here.</p><a class="btn btn-primary" href="{{ url_for('upload_image') }}">Upload your first image</a></div>{% endif %}</section>
+</div></div>
+{% endblock %}

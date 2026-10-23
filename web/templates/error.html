@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}{{ code }} · OralSmart AI{% endblock %}
+{% block content %}
+<section class="auth-section"><div class="auth-card text-center"><span class="empty-icon mx-auto"><i class="bi bi-exclamation-circle"></i></span><span class="section-kicker">ERROR {{ code }}</span><h1>{{ message }}</h1><a href="{{ url_for('index') }}" class="btn btn-primary mt-3">Return home</a></div></section>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Create an account · OralSmart AI{% endblock %}
+{% block content %}
+<section class="auth-section"><div class="auth-card">
+  <div class="auth-heading"><div class="feature-icon icon-lilac"><i class="bi bi-heart-pulse"></i></div><span class="section-kicker">Get started</span><h1>Create your account</h1><p>A clearer path to thoughtful oral care.</p></div>
+  <form method="post" class="form-stack">
+    <label for="name">Full name</label><input class="form-control" id="name" name="name" maxlength="120" autocomplete="name" required>
+    <label for="email">Email address</label><input class="form-control" id="email" name="email" type="email" maxlength="255" autocomplete="email" required>
+    <label for="phone">Phone <span class="optional-label">Optional</span></label><input class="form-control" id="phone" name="phone" maxlength="40" type="tel" autocomplete="tel">
+    <label for="role">I am joining as a</label><select class="form-select" id="role" name="role" required><option value="patient">Patient</option><option value="dentist">Dentist</option></select>
+    <label for="password">Password</label><input class="form-control" id="password" name="password" type="password" minlength="8" autocomplete="new-password" required><small class="form-hint">Use at least 8 characters.</small>
+    <button class="btn btn-primary btn-lg w-100 mt-2" type="submit">Create account <i class="bi bi-arrow-right ms-2"></i></button>
+  </form>
+  <p class="auth-switch">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+  <p class="role-note"><i class="bi bi-info-circle"></i> This academic demo allows role selection during sign-up.</p>
+</div></section>
+{% endblock %}

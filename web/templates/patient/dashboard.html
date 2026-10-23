@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Patient dashboard · OralSmart AI{% endblock %}
+{% block content %}
+<div class="dashboard-page"><div class="container">
+  <div class="page-heading"><div><span class="section-kicker">PATIENT DASHBOARD</span><h1>Good to see you, {{ current_user.name.split(' ')[0] }}.</h1><p>Keep your oral-care journey moving, one small step at a time.</p></div><a href="{{ url_for('upload_image') }}" class="btn btn-primary"><i class="bi bi-plus-lg me-2"></i>New screening</a></div>
+  <div class="stats-grid">
+    <a class="stat-card stat-card-link" href="{{ url_for('patient_history') }}" aria-label="View all {{ total_screenings }} screenings">
+      <span class="stat-icon icon-lilac"><i class="bi bi-collection"></i></span><span><small>Total screenings</small><strong>{{ total_screenings }}</strong></span>
+    </a>
+    {% if latest %}
+      <a class="stat-card stat-card-link" href="{{ url_for('screening_result', screening_id=latest.id) }}" aria-label="View latest screening report">
+        <span class="stat-icon icon-mint"><i class="bi bi-clock-history"></i></span><span><small>Latest screening</small><strong class="stat-date">{{ latest.created_at.strftime('%b %d, %Y') }}</strong></span>
+      </a>
+    {% else %}
+      <div class="stat-card stat-card-disabled" aria-disabled="true">
+        <span class="stat-icon icon-mint"><i class="bi bi-clock-history"></i></span><span><small>Latest screening</small><strong class="stat-date">No screenings yet</strong></span>
+      </div>
+    {% endif %}
+    <a class="stat-card stat-card-link" href="{{ url_for('patient_reviews') }}" aria-label="View dentist reviews, including {{ pending_count }} pending">
+      <span class="stat-icon icon-peach"><i class="bi bi-person-lines-fill"></i></span><span><small>Pending dentist reviews</small><strong>{{ pending_count }}</strong></span>
+    </a>
+    {% if next_follow_up %}
+      <a class="stat-card stat-card-link" href="{{ url_for('patient_reviews') }}" aria-label="View follow-up scheduled for {{ next_follow_up.strftime('%B %d, %Y') }}">
+        <span class="stat-icon icon-blue"><i class="bi bi-calendar-heart"></i></span><span><small>Next follow-up</small><strong class="stat-date">{{ next_follow_up.strftime('%b %d, %Y') }}</strong></span>
+      </a>
+    {% else %}
+      <div class="stat-card stat-card-disabled" aria-disabled="true">
+        <span class="stat-icon icon-blue"><i class="bi bi-calendar-heart"></i></span><span><small>Next follow-up</small><strong class="stat-date">No follow-up scheduled</strong></span>
+      </div>
+    {% endif %}
+  </div>
+  <div class="dashboard-grid mt-4">
+    <section class="panel-card chart-panel"><div class="panel-heading"><div><h2>Your screening activity</h2><p>A simple view of your recent activity.</p></div><a class="text-link" href="{{ url_for('patient_history') }}">View history <i class="bi bi-arrow-right"></i></a></div>
+      {% if screenings %}<div class="chart-wrap"><canvas id="historyChart" aria-label="Screening history chart"></canvas></div>{% else %}<div class="empty-inline"><span class="empty-icon"><i class="bi bi-bar-chart"></i></span><strong>Your activity will appear here</strong><p>Upload your first image to get started.</p></div>{% endif %}
+    </section>
+    <section class="panel-card quick-panel"><div class="panel-heading"><div><h2>Quick actions</h2><p>Everything you need, right here.</p></div></div>
+      <a class="quick-action" href="{{ url_for('upload_image') }}"><span class="action-icon icon-lilac"><i class="bi bi-camera"></i></span><span><strong>Upload dental image</strong><small>Start a new screening</small></span><i class="bi bi-chevron-right"></i></a>
+      <a class="quick-action" href="{{ url_for('patient_history') }}"><span class="action-icon icon-mint"><i class="bi bi-journal-medical"></i></span><span><strong>Screening history</strong><small>See your past reports</small></span><i class="bi bi-chevron-right"></i></a>
+      <a class="quick-action" href="{{ url_for('patient_reviews') }}"><span class="action-icon icon-blue"><i class="bi bi-person-check"></i></span><span><strong>My dentist reviews</strong><small>Review notes and follow-ups</small></span><i class="bi bi-chevron-right"></i></a>
+      <a class="quick-action" href="{{ url_for('patient_profile') }}"><span class="action-icon icon-peach"><i class="bi bi-person"></i></span><span><strong>My profile</strong><small>Update your details</small></span><i class="bi bi-chevron-right"></i></a>
+    </section>
+  </div>
+  <section class="panel-card mt-4"><div class="panel-heading"><div><h2>Recent screenings</h2><p>Your latest image submissions and review status.</p></div><a class="text-link" href="{{ url_for('patient_history') }}">All screenings <i class="bi bi-arrow-right"></i></a></div>
+    {% if screenings %}<div class="table-responsive"><table class="table app-table align-middle"><thead><tr><th>Screening</th><th>Date</th><th>Result</th><th>Review status</th><th></th></tr></thead><tbody>
+    {% for screening in screenings %}<tr><td><div class="table-image"><img src="{{ url_for('screening_image', screening_id=screening.id) }}" alt="Uploaded dental image"></div></td><td>{{ screening.created_at.strftime('%b %d, %Y') }}</td><td>{{ screening.ai_result }}</td><td><span class="status-badge {{ 'status-pending' if screening.review_requested and screening.review_status == 'Pending' else 'status-done' if screening.dentist_review else 'status-pending' }}">{{ screening.review_status if screening.review_requested else 'Not requested' }}</span></td><td><a class="text-link" href="{{ url_for('screening_result', screening_id=screening.id) }}">View <i class="bi bi-arrow-right"></i></a></td></tr>{% endfor %}
+    </tbody></table></div>{% else %}<div class="empty-state"><span class="empty-icon"><i class="bi bi-image"></i></span><h3>No screenings yet</h3><p>Upload a dental image to see your results and guidance here.</p><a href="{{ url_for('upload_image') }}" class="btn btn-primary">Upload an image</a></div>{% endif %}
+  </section>
+  <div class="disclaimer-mini"><i class="bi bi-info-circle"></i> OralSmart AI provides preliminary screening information for education only. It is not a dental diagnosis.</div>
+</div></div>
+{% endblock %}
+{% block scripts %}
+{% if screenings %}<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script><script>
+const chartCanvas = document.getElementById("historyChart");
+if (chartCanvas) new Chart(chartCanvas, {
+  type: "line",
+  data: { labels: {{ chart_labels|tojson }}, datasets: [{ label: "Screenings", data: {{ chart_values|tojson }}, borderColor: "#3c8f83", backgroundColor: "rgba(60,143,131,.10)", fill: true, tension: .35, pointRadius: 4, pointBackgroundColor: "#3c8f83" }] },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0, stepSize: 1 }, grid: { color: "#edf1f0" } }, x: { grid: { display: false } } } }
+});
+</script>{% endif %}
+{% endblock %}

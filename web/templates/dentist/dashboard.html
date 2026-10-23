@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Dentist review queue · OralSmart AI{% endblock %}
+{% block content %}
+<div class="dashboard-page"><div class="container">
+  <div class="page-heading"><div><span class="section-kicker">DENTIST WORKSPACE</span><h1>Review queue</h1><p>Review patient-submitted images and share professional next steps.</p></div></div>
+  <div class="stats-grid dentist-stats">
+    <div class="stat-card"><span class="stat-icon icon-lilac"><i class="bi bi-people"></i></span><div><small>Patients</small><strong>{{ total_patients }}</strong></div></div>
+    <div class="stat-card"><span class="stat-icon icon-peach"><i class="bi bi-hourglass-split"></i></span><div><small>Pending reviews</small><strong>{{ pending_count }}</strong></div></div>
+    <div class="stat-card"><span class="stat-icon icon-mint"><i class="bi bi-check2-circle"></i></span><div><small>Completed reviews</small><strong>{{ completed_count }}</strong></div></div>
+    <div class="stat-card"><span class="stat-icon icon-blue"><i class="bi bi-calendar-heart"></i></span><div><small>Upcoming follow-ups</small><strong>{{ follow_up_count }}</strong></div></div>
+  </div>
+  <section class="panel-card mt-4"><div class="panel-heading"><div><h2>Patient screenings</h2><p>AI screening output is shown separately from your professional review.</p></div></div>
+    {% if screenings %}<div class="table-responsive"><table class="table app-table align-middle"><thead><tr><th>Patient</th><th>Date</th><th>Screening output</th><th>Confidence</th><th>Review status</th><th>Action</th></tr></thead><tbody>
+    {% for screening in screenings %}<tr><td><div class="patient-cell"><span class="avatar">{{ screening.patient.name[0]|upper }}</span><span><strong>{{ screening.patient.name }}</strong><small>{{ screening.patient.email }}</small></span></div></td><td>{{ screening.created_at.strftime('%b %d, %Y') }}</td><td>{{ screening.ai_result }}</td><td>{% if screening.confidence is not none %}{{ '%.1f'|format(screening.confidence * 100) }}%{% else %}N/A{% endif %}</td><td><span class="status-badge {{ 'status-done' if screening.review_status in ['Reviewed', 'Completed'] else 'status-pending' }}">{{ screening.review_status }}</span></td><td><a href="{{ url_for('dentist_review', screening_id=screening.id) }}" class="btn btn-outline-primary btn-sm">{{ 'View' if screening.dentist_review else 'Review' }} <i class="bi bi-arrow-right ms-1"></i></a></td></tr>{% endfor %}
+    </tbody></table></div>{% else %}<div class="empty-state"><span class="empty-icon"><i class="bi bi-inbox"></i></span><h3>No patient screenings yet</h3><p>Patient submissions will appear here for professional review.</p></div>{% endif %}
+  </section>
+  <div class="disclaimer-mini"><i class="bi bi-info-circle"></i> Demo screening output is not a diagnosis. Professional findings and care recommendations are recorded separately.</div>
+</div></div>
+{% endblock %}

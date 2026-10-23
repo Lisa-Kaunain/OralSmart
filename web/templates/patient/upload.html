@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Upload an image · OralSmart AI{% endblock %}
+{% block content %}
+<div class="dashboard-page"><div class="container narrow-container">
+  <div class="breadcrumb-line"><a href="{{ url_for('patient_dashboard') }}">Dashboard</a><i class="bi bi-chevron-right"></i><span>New screening</span></div>
+  <div class="page-heading"><div><span class="section-kicker">PRELIMINARY SCREENING</span><h1>Upload a dental image</h1><p>Choose a clear photo of your teeth to create a screening record.</p></div></div>
+  <div class="upload-layout">
+    <section class="panel-card upload-panel">
+      <form method="post" enctype="multipart/form-data" id="uploadForm">
+        <label class="drop-zone" for="imageInput" id="dropZone"><span class="upload-symbol"><i class="bi bi-cloud-arrow-up"></i></span><strong>Drop your image here</strong><span>or <em>browse files</em> from your device</span><small>JPG, JPEG, PNG · Maximum file size 8 MB</small><input type="file" id="imageInput" name="image" accept=".jpg,.jpeg,.png,image/jpeg,image/png" required></label>
+        <div class="preview-wrap" id="previewWrap" hidden><img id="imagePreview" alt="Preview of selected dental image"><div><strong id="fileName">Image preview</strong><button type="button" class="btn btn-sm btn-outline-secondary" id="removeImage">Remove</button></div></div>
+        <div class="privacy-note"><i class="bi bi-shield-lock"></i><span>Your image is stored privately and can only be viewed by you and signed-in dentists.</span></div>
+        <button type="submit" class="btn btn-primary btn-lg w-100" id="submitButton"><span class="button-label">Analyze image <i class="bi bi-arrow-right ms-2"></i></span><span class="button-loading" hidden><span class="spinner-border spinner-border-sm me-2" role="status"></span>Preparing screening…</span></button>
+      </form>
+    </section>
+    <aside class="panel-card upload-aside"><div class="feature-icon icon-mint"><i class="bi bi-lightbulb"></i></div><h2>For a clearer photo</h2><ul class="check-list"><li><i class="bi bi-check-circle"></i> Use a well-lit room.</li><li><i class="bi bi-check-circle"></i> Keep the camera steady and in focus.</li><li><i class="bi bi-check-circle"></i> Include the area you want reviewed.</li><li><i class="bi bi-check-circle"></i> Avoid filters or editing the image.</li></ul><div class="aside-disclaimer"><strong>About AI screening</strong><p>A prediction is shown only when a trained model and matching class labels are configured. Otherwise, the screening report clearly states that no prediction was made.</p></div></aside>
+  </div>
+</div></div>
+{% endblock %}
