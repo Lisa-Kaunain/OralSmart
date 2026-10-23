@@ -83,13 +83,31 @@ class DentistReview(db.Model):
 
 
 def create_app(test_config=None):
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(
+        __name__,
+        instance_path="/tmp/oralsmart_instance"
+    )
+
     app.config.from_object(Config)
+
     if test_config:
         app.config.update(test_config)
+
+    app.config["UPLOAD_FOLDER"] = "/tmp/oralsmart_uploads"
+
     os.makedirs(app.instance_path, exist_ok=True)
     os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+
     db.init_app(app)
+
+    logging.basicConfig(level=logging.INFO)
+
+    with app.app_context():
+        try:
+            db.create_all()
+        except SQLAlchemyError:
+            app.logger.exception("Unable to initialize the database")
+            raise
 
     logging.basicConfig(level=logging.INFO)
     with app.app_context():
@@ -460,7 +478,6 @@ def create_app(test_config=None):
         ), 500
 
     return app
-
 
 app = create_app()
 
